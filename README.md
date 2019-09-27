@@ -1,10 +1,8 @@
-# Predict Stock Market Index Using RNN
+## Predict Stock Market Index Using RNNs
 
-We implemented an LSTM RNN to predict an individual company's future stock prices. Our features are:
-* the past prices of the stock
-* sentiment analysis on scraped Reuters headlines regarding the company
-* economic indicators for general market health
-* sentiment analysis on scraped top-25 Reddit headlines for general market health
+### Project Overview
+The work is part of continuing research that is to examine the feasibility and performance of machine learning architectures in predicting time series data. Our focus at thi point is on Recurrent Neural Network (RNN). We have implemented three models, RNN, RNN with LSTM and RNN with GRU using Keras with Tensorflow backend.  to predict an individual company's future stock prices. Our features are:
+
 
 We pass the features to an LSTM RNN to train future stock price prediction. Following training, our model can predict future stock prices with high accuracy and attains high returns on investment while investing as an agent.
 
