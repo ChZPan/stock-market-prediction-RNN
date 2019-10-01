@@ -13,13 +13,15 @@ We pass the features to an LSTM RNN to train future stock price prediction. Foll
 Our model `StockModel()` is a class in `lstm.py`. We have two demos of the model's predictions on the Apple stock (AAPL) in the `demos/` directory. The Jupyter notebook is a standalone working demo of the model on AAPL, with outputs preprinted in-line for easy viewing. The same outputs can also be produced by running `python PredictionDemo_AAPL.py`. Note that we have not yet finished tuning hyperparameters on other stocks besides AAPL.
 
 ## Results
-Being trained with the 5-year long Shanghai-Shenzhen CSI-300 5-minute data, the models can predict future index of the test data with a high degree of accuracy. All of the three models achieved comparable performance.  
+Being trained with the 2-year-long Shanghai-Shenzhen CSI-300 5-minute data, the models can predict future index of the 3-month-long test data with a high degree of accuracy. All of the three models achieved comparable performance, as summarized below.  
 
 | Models | MSE | RMSE | Accuracy |
 | :-----: | :-----: | :-----: | :-----:|
-| RNN |  |  |  |
-| LSTM |  |  |  |
-| GRU |  |  |  | 
+| RNN | 126.15 | 11.23 | 0.84 |
+| LSTM | 266.34 | 16.32 | 0.84 |
+| GRU | 116.38 | 10.79 | 0.89 | 
+
+
 Our LSTM RNN model learns to "buy-low sell-high":
 ![lstm buy/sell graph](figures/lstm/AAPL_buysell.png "Buy/Sell Decisions for AAPL Test Set")
 
