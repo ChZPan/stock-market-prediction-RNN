@@ -1,11 +1,10 @@
 ## Predict Stock Market Index Using RNNs
 
 ### Project Overview
-The work is part of continuing research that is to examine the feasibility and performance of machine learning architectures in predicting time series data. Our focus at thi point is on Recurrent Neural Network (RNN). We have implemented three models:
-*RNN
-*RNN with LSTM
-*RNN with GRU 
-using Keras with Tensorflow backend. 
+The work is part of continuing research that is to examine the feasibility and performance of machine learning architectures in predicting time series data. Our focus at thi point is on Recurrent Neural Network (RNN). We have implemented three models using Keras with Tensorflow backend:
+* RNN
+* RNN with LSTM
+* RNN with GRU 
 
 The problem to be tackled is stock market index prediction based on historical data.
 
@@ -14,7 +13,13 @@ We pass the features to an LSTM RNN to train future stock price prediction. Foll
 Our model `StockModel()` is a class in `lstm.py`. We have two demos of the model's predictions on the Apple stock (AAPL) in the `demos/` directory. The Jupyter notebook is a standalone working demo of the model on AAPL, with outputs preprinted in-line for easy viewing. The same outputs can also be produced by running `python PredictionDemo_AAPL.py`. Note that we have not yet finished tuning hyperparameters on other stocks besides AAPL.
 
 ## Results
-The models were trained with the SH300FI data sets. After training,  
+Being trained with the 5-year long Shanghai-Shenzhen CSI-300 5-minute data, the models can predict future index of the test data with a high degree of accuracy. All of the three models achieved comparable performance.  
+
+| Models | MSE | RMSE | Accuracy |
+| :-----: | :-----: | :-----: | :-----:|
+| RNN |  |  |  |
+| LSTM |  |  |  |
+| GRU |  |  |  | 
 Our LSTM RNN model learns to "buy-low sell-high":
 ![lstm buy/sell graph](figures/lstm/AAPL_buysell.png "Buy/Sell Decisions for AAPL Test Set")
 
