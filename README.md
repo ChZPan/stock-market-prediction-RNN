@@ -24,7 +24,7 @@ Being trained with the 2-year-long Shanghai-Shenzhen CSI-300 5-minute data, the 
 The accuracy reported refers to hourly directional predictive accuracy.
 
 Our LSTM RNN model learns to "buy-low sell-high":
-![lstm buy/sell graph](figures/lstm/AAPL_buysell.png "Buy/Sell Decisions for AAPL Test Set")
+![lstm](./images/LSTM_2017-2019.png)
 
 Our LSTM RNN model achieves significant return on investment in our test set (2016 calendar year):
 ![lstm return graph](figures/lstm/AAPL_portfolio.png "AAPL LSTM Portfolio Value")
