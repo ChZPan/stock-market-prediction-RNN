@@ -24,10 +24,16 @@ Being trained with the 2-year-long Shanghai-Shenzhen CSI-300 5-minute data, the 
 The accuracy metrics reported above refers to hourly mean directional predictive accuracy, which compares the movement direction (upward or downward) of prediction to that of actual observation, with 1-hour look-back period.
 
 The basic RNN model
-![rnn](./images/simplernn_2017-2019.png)
+![RNN](./images/simplernn_2017-2019.png)
 
-Our LSTM RNN model achieves significant return on investment in our test set (2016 calendar year):
-![lstm return graph](figures/lstm/AAPL_portfolio.png "AAPL LSTM Portfolio Value")
+The LSTM RNN model
+![LSTM](./images/LSTM_2017-2019.png)
+
+The GRU RNN model
+![GRU](./images/GRU_2017-2019.png)
+
+Comparing the performance of the three models running on the test data (Feb. - Apr. 2019) 
+![models_compare](./images/models_compare-2017-2019.png)
 
 ## Setup and Run
 To quickly get a functional implementation of our model, follow the `demos/PredictionDemo_AAPL.py` skeleton by running:
