@@ -33,7 +33,7 @@ The GRU RNN model
 ![GRU](./images/GRU_2017-2019.png)
 
 Comparing the performance of the three models running on the test data (Feb. - Apr. 2019) 
-![models_compare](./images/models_compare-2017-2019.png)
+![models_compare](./images/models_compare_2017-2019.png)
 
 ## Setup and Run
 To quickly get a functional implementation of our model, follow the `demos/PredictionDemo_AAPL.py` skeleton by running:
