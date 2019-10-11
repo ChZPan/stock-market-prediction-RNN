@@ -17,8 +17,8 @@ def rmse(y_true, y_pred):
 
 
 def mda(y_true, y_pred, t=12):
-    d = K.equal(K.sign(y_true[t::t] - y_true[:-t:t]),
-                K.sign(y_pred[t::t] - y_pred[:-t:t]))
+    d = K.equal(K.sign(y_true[t: ] - y_true[:-t]),
+                K.sign(y_pred[t: ] - y_pred[:-t]))
     return K.mean(K.cast(d, K.floatx()))
 
     
@@ -164,6 +164,7 @@ class ModelPredictions:
                                           .reshape(-1), index = self.__datetime)        
         
         self.loss = self.cal_mse(self.predictions_org, self.true_org)
+        self.rmse = self.cal_rmse(self.predictions_org, self.true_org)
         self.mda = self.cal_mda(self.predictions_org, self.true_org, self.__window)
                 
     def _predict(self, X, model, batch_size):
@@ -239,6 +240,13 @@ class ModelPredictions:
         else:
             mse = [(pred - true).pow(2).mean()]
         return mse
+
+    def cal_rmse(self, pred, true):
+        if type(pred) is list:
+            rmse = [np.sqrt((y - y_hat).pow(2).mean()) for y, y_hat in zip(pred, true)]
+        else:
+            rmse = [np.sqrt((pred - true).pow(2).mean())]
+        return rmse
     
     def cal_mda(self, pred, true, t):
         if type(pred) is list:
