@@ -21,10 +21,10 @@ Being trained with the 2-year-long Shanghai-Shenzhen CSI-300 5-minute data, the 
 | LSTM | 266.34 | 16.32 | 0.84 |
 | GRU | 116.38 | 10.79 | 0.89 | 
 
-The accuracy reported refers to hourly directional predictive accuracy.
+The accuracy metrics reported above refers to hourly mean directional predictive accuracy, which compares the movement direction (upward or downward) of prediction to that of actual observation, with 1-hour look-back period.
 
-Our LSTM RNN model learns to "buy-low sell-high":
-![lstm](./images/LSTM_2017-2019.png)
+The basic RNN model
+![rnn](./images/simplernn_2017-2019.png)
 
 Our LSTM RNN model achieves significant return on investment in our test set (2016 calendar year):
 ![lstm return graph](figures/lstm/AAPL_portfolio.png "AAPL LSTM Portfolio Value")
