@@ -24,19 +24,19 @@ Being trained with the 2-year-long Shanghai-Shenzhen CSI-300 5-minute data, the 
 The accuracy metrics reported above refers to hourly mean directional predictive accuracy, which compares the movement direction (upward or downward) of prediction to that of actual observation, with 1-hour look-back period.
 
 The basic RNN model
-![RNN](./images/simplernn_2017-2019.png)
+![RNN](./figures/simplernn_2017-2019.png)
 
 The LSTM RNN model
-![LSTM](./images/LSTM_2017-2019.png)
+![LSTM](./figures/LSTM_2017-2019.png)
 
 The GRU RNN model
-![GRU](./images/GRU_2017-2019.png)
+![GRU](./figures/GRU_2017-2019.png)
 
 Comparing the performance of the three models running on the test data (Feb. - Apr. 2019) 
-![models_compare](./images/models_compare_2017-2019.png)
+![models_compare](./figures/models_compare_2017-2019.png)
 
 ### Repo Contents
-* `data/SH300-5min` : directory containing Shanghai-Shenzhen CSI-300 5-minute data from Apr. 2010 to Apr. 2019.
+* `data` : directory containing Shanghai-Shenzhen CSI-300 5-minute data from Apr. 2010 to Apr. 2019.
 * `figures/` : directory containing plots generated from `main.py` and `models/momentum.py`
 * `hyperparameters/` : directory containing `hyperparameters/tuning.py` file to loop through hyperparameters and measure validation set rmse; hyperparameters/curves/ directory with hyperparameter optimization curves produced from `hyperparameters/tuning.py`
 * `models/` : directory containing saved keras model outputs as well as a momentum investing agent model comparison (inherits from the `StockModel()` class from `lstm.py`), which buys if the stock price went up that day and sells otherwise
