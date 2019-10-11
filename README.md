@@ -12,7 +12,7 @@ We pass the features to an LSTM RNN to train future stock price prediction. Foll
 
 Our model `StockModel()` is a class in `lstm.py`. We have two demos of the model's predictions on the Apple stock (AAPL) in the `demos/` directory. The Jupyter notebook is a standalone working demo of the model on AAPL, with outputs preprinted in-line for easy viewing. The same outputs can also be produced by running `python PredictionDemo_AAPL.py`. Note that we have not yet finished tuning hyperparameters on other stocks besides AAPL.
 
-## Results
+### Results
 Being trained with the 2-year-long Shanghai-Shenzhen CSI-300 5-minute data, the models can predict future index of the 3-month-long test data with a high degree of accuracy. All of the three models achieved comparable performance, as summarized below.  
 
 | Models | MSE | RMSE | Accuracy |
@@ -34,6 +34,16 @@ The GRU RNN model
 
 Comparing the performance of the three models running on the test data (Feb. - Apr. 2019) 
 ![models_compare](./images/models_compare_2017-2019.png)
+
+### Repo Contents
+* `data/SH300-5min` : directory containing Shanghai-Shenzhen CSI-300 5-minute data from Apr. 2010 to Apr. 2019.
+* `figures/` : directory containing plots generated from `main.py` and `models/momentum.py`
+* `hyperparameters/` : directory containing `hyperparameters/tuning.py` file to loop through hyperparameters and measure validation set rmse; hyperparameters/curves/ directory with hyperparameter optimization curves produced from `hyperparameters/tuning.py`
+* `models/` : directory containing saved keras model outputs as well as a momentum investing agent model comparison (inherits from the `StockModel()` class from `lstm.py`), which buys if the stock price went up that day and sells otherwise
+* `scrape/` : jupyter notebooks and csv output from reddit and reuters headline scraping
+* `helpers.py` : some python helper functions, including plotting and date manipulation
+* `lstm.py` : defines the `StockModel()` class, including training and testing methods (see below for full description of methods and attributes)
+* `main.py` : python file to loop through stock tickers, train `StockModel()` classes from `lstm.py`, and save figures
 
 ## Setup and Run
 To quickly get a functional implementation of our model, follow the `demos/PredictionDemo_AAPL.py` skeleton by running:
