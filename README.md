@@ -1,13 +1,13 @@
 ## Predict Stock Market Index Using RNNs
 
 ### Project Overview
-The work is part of continuing research that is to examine the feasibility and performance of machine learning architectures in predicting time series data. Our focus at thi point is on Recurrent Neural Network (RNN). We are going to tackle the problem of stock market index prediction. Three models have been implemented using Keras with Tensorflow backend:
-* RNN
+The work is part of continuing research that is to examine the feasibility and performance of machine learning architectures in predicting time series data. Our focus at this point is on Recurrent Neural Network (RNN). We are going to tackle the problem of stock market index prediction, using datasets comprised of futures trading occurring on the China Financial Futures Exchange (CFFEX) during a 9-year period from April 2010 to April 2019. Three models have been implemented using Keras with Tensorflow backend:
+* RNN 
 * RNN with LSTM
 * RNN with GRU 
 
 ### Results
-Being trained with the 2-year-long Shanghai-Shenzhen CSI-300 5-minute data, the models can predict future index of the 3-month-long test data with a high degree of accuracy. All of the three models achieved comparable performance, as summarized below.  
+Being trained with the 2-year-long CSI-300 5-minute data, the models can predict future index of the 3-month-long test data with a high degree of accuracy. All of the three models achieved comparable performance, as summarized below.  
 
 | Models | MSE | RMSE | Accuracy |
 | :-----: | :-----: | :-----: | :-----:|
@@ -38,20 +38,18 @@ Comparing the performance of the three models running on the test data (Feb. - A
   * `utils.py` : includes some python helper functions, including plotting and date manipulation.
   * `predict-stock-rnn.ipynb` : main script in jupyter notebook.
 
-### Setup and Run
-To quickly get a functional implementation of our model, follow the `demos/PredictionDemo_AAPL.py` skeleton by running:
-```python
-from lstm import StockModel
+### Dependencies
+* Python 3
+* [Tensorflow](https://www.tensorflow.org/)
+* [Keras](https://keras.io/)
+* numpy
+* pandas
+* matplotlib
+* sklearn
 
-aapl_model = StockModel('AAPL')
-aapl_model.loadStock()
-model, history = aapl_model.train()
-rmse = aapl_model.validate(model)
-
-# perform downstream analyses and prediction on test set using keras model
-```
-
-
+### Reference Papers
+* Moghaddam A. H., Moghaddam M. H., and Esfandyari M. (2016). "Stock market index prediction using artificial neural network" Journal of Economics, Finance and Administrative Science 21 (41): 89-93.
+* Hiransha M., Gopalakrishnan E. A., Menonab V. K., Soman K.P (2018). "NSE Stock Market Prediction Using Deep-Learning Models" International Conference on Computational Intelligence and Data Science (ICCIDS 2018).
 
 
 
