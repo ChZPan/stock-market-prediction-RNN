@@ -14,6 +14,7 @@ class StockIndexDataset:
                  index_name="SH300IF",
                  batch_size=32,
                  time_steps=12,
+                 forecast_steps=0,
                  val_ratio=0.2,
                  test_ratio=0.2,
                  standardization='standard',
@@ -22,6 +23,7 @@ class StockIndexDataset:
         self.index_name = index_name
         self.batch_size = batch_size
         self.time_steps = time_steps
+        self.forecast_steps = forecast_steps
         self.val_ratio = val_ratio
         self.test_ratio = test_ratio
         self.close_price_only = close_price_only
@@ -55,9 +57,9 @@ class StockIndexDataset:
          self.y_train, self.y_val, self.y_test], \
         [self.dtime_train, self.dtime_val, self.dtime_test] = \
         self._prepare_data(self.raw_seq, datetime, 
-                           self.time_steps, self.batch_size, 
-                           self.val_ratio, self.test_ratio, 
-                           self.standardization)
+                           self.time_steps, self.forecast_steps,
+                           self.batch_size, self.val_ratio, 
+                           self.test_ratio, self.standardization)
         self.X = [self.X_train, self.X_val, self.X_test]
         self.y = [self.y_train, self.y_val, self.y_test]
         self.datetime = [self.dtime_train, self.dtime_val, self.dtime_test]
@@ -70,14 +72,14 @@ class StockIndexDataset:
                       self.y_val.shape[0],
                       self.y_test.shape[0]))
           
-    def _prepare_data(self, raw_seq, raw_dtime, time_steps, batch_size, 
-                      val_ratio, test_ratio, standardization):
+    def _prepare_data(self, raw_seq, raw_dtime, time_steps, forecast_steps,
+                      batch_size, val_ratio, test_ratio, standardization):
         if standardization is not None:
             seq = self._standardize(raw_seq, standardization)
         else:
             seq = raw_seq
         
-        X, y, dtime = self._build_timeser(seq, raw_dtime, time_steps)
+        X, y, dtime = self._build_timeser(seq, raw_dtime, time_steps, forecast_steps)
         X_train, X_test, y_train, y_test, dtime_train, dtime_test = \
         train_test_split(X, y, dtime, test_size=test_ratio, shuffle=False)
         X_train, X_val, y_train, y_val, dtime_train, dtime_val = \
@@ -93,15 +95,15 @@ class StockIndexDataset:
         return seqs, dtimes
     
         
-    def _build_timeser(self, seq, dtime, time_steps):
-        dim_0 = seq.shape[0] - time_steps
+    def _build_timeser(self, seq, dtime, time_steps, forecast_steps):
+        dim_0 = seq.shape[0] - (time_steps + forecast_steps)
         dim_1 = seq.shape[1]
         X = np.zeros((dim_0, time_steps, dim_1))
 
         for i in range(dim_0):
             X[i] = seq[i : i+time_steps]
-        y = seq[time_steps:]
-        dt = dtime[time_steps:]
+        y = seq[time_steps+forecast_steps:]
+        dt = dtime[time_steps+forecast_steps:]
 
         return X, y, dt
     
