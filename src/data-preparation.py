@@ -17,6 +17,7 @@ class StockIndexDataset:
                  forecast_steps=0,
                  val_ratio=0.2,
                  test_ratio=0.2,
+                 test_only=False,
                  standardization='standard',
                  close_price_only=True):
         self.dataset_files = dataset_files
@@ -26,8 +27,9 @@ class StockIndexDataset:
         self.forecast_steps = forecast_steps
         self.val_ratio = val_ratio
         self.test_ratio = test_ratio
-        self.close_price_only = close_price_only
-        self.standardization = standardization
+        self.test_only = test_only
+        # self.close_price_only = close_price_only
+        # self.standardization = standardization
 
         # Read raw dataset file
         if type(self.dataset_files) is list:
@@ -52,47 +54,58 @@ class StockIndexDataset:
             self.raw_seq = self.raw_df.drop(columns = ['date', 'time']).values
             # [price for tup in self.raw_df[['open', 'close']].values for price in tup]
 
-        #self.raw_seq = np.array(self.raw_seq)
-        [self.X_train, self.X_val, self.X_test,
-         self.y_train, self.y_val, self.y_test], \
-        [self.dtime_train, self.dtime_val, self.dtime_test] = \
-        self._prepare_data(self.raw_seq, datetime, 
-                           self.time_steps, self.forecast_steps,
-                           self.batch_size, self.val_ratio, 
-                           self.test_ratio, self.standardization)
-        self.X = [self.X_train, self.X_val, self.X_test]
-        self.y = [self.y_train, self.y_val, self.y_test]
-        self.datetime = [self.dtime_train, self.dtime_val, self.dtime_test]
+        self.X, self.y, self.datetime = self._prepare_data(self.raw_seq, datetime, 
+                                                           self.time_steps, self.forecast_steps,
+                                                           self.batch_size, self.val_ratio, self.test_ratio, 
+                                                           test_only, standardization)
+        if test_only is False:
+            [self.X_train, self.X_val, self.X_test] = self.X
+            [self.y_train, self.y_val, self.y_test] = self.y
+            [self.dtime_train, self.dtime_val, self.dtime_test] = self.datetime
+        
         print("Loading dataset... Ready for training.")
     
     def info(self):
         print("Stock Index Code: {}".format(self.index_name))
-        print("Train Set Length: {}\nValidation Set Length: {}\nTest Set Length: {}"
-              .format(self.y_train.shape[0],
-                      self.y_val.shape[0],
-                      self.y_test.shape[0]))
+        if self.test_only:
+            print("Test Set Length: {}".format(self.y.shape))
+        else:
+            print("Train Set Length: {}\nValidation Set Length: {}\nTest Set Length: {}"
+                  .format(self.y_train.shape[0],
+                          self.y_val.shape[0],
+                          self.y_test.shape[0]))
           
-    def _prepare_data(self, raw_seq, raw_dtime, time_steps, forecast_steps,
-                      batch_size, val_ratio, test_ratio, standardization):
+    def _prepare_data(self, raw_seq, raw_dtime, 
+                      time_steps, forecast_steps,
+                      batch_size, val_ratio, test_ratio, 
+                      test_only, standardization):
         if standardization is not None:
             seq = self._standardize(raw_seq, standardization)
         else:
             seq = raw_seq
         
-        X, y, dtime = self._build_timeser(seq, raw_dtime, time_steps, forecast_steps)
-        X_train, X_test, y_train, y_test, dtime_train, dtime_test = \
-        train_test_split(X, y, dtime, test_size=test_ratio, shuffle=False)
-        X_train, X_val, y_train, y_val, dtime_train, dtime_val = \
-        train_test_split(X_train, y_train, dtime_train, test_size=val_ratio, shuffle=False)
+        if test_only:
+            X, y, dtime = self._build_timeser(seq, raw_dtime, time_steps, forecast_steps)
+            X = self._trim_seq(X, batch_size)
+            y = self._trim_seq(y, batch_size)
+            dtime = self._trim_seq(dtime, batch_size)
 
-        seqs = [X_train, X_val, X_test, y_train, y_val, y_test]
-        dtimes = [dtime_train, dtime_val, dtime_test]
-        for i in range(len(seqs)):
-            seqs[i] = self._trim_seq(seqs[i], batch_size)
-        for i in range(len(dtimes)):
-            dtimes[i] = self._trim_seq(dtimes[i], batch_size)
+        else:
+            temp_X, temp_y, temp_dtime = self._build_timeser(seq, raw_dtime, time_steps, forecast_steps)
+            X_train, X_test, y_train, y_test, dtime_train, dtime_test = \
+            train_test_split(temp_X, temp_y, temp_dtime, test_size=test_ratio, shuffle=False)
+            X_train, X_val, y_train, y_val, dtime_train, dtime_val = \
+            train_test_split(X_train, y_train, dtime_train, test_size=val_ratio, shuffle=False)
+            X = [X_train, X_val, X_test]
+            y = [y_train, y_val, y_test]
+            dtime = [dtime_train, dtime_val, dtime_test]
+            
+            for i in range(len(X)):
+                X[i] = self._trim_seq(X[i], batch_size)
+                y[i] = self._trim_seq(y[i], batch_size)
+                dtime[i] = self._trim_seq(dtime[i], batch_size)
         
-        return seqs, dtimes
+        return X, y, dtime
     
         
     def _build_timeser(self, seq, dtime, time_steps, forecast_steps):

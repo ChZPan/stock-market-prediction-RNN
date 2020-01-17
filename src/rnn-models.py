@@ -1,3 +1,4 @@
+import os
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
@@ -60,10 +61,10 @@ def build_LSTM(input_shape, parameters):
     return model
 
 
-def training_callbacks(callback_lsit, params, output_path=None):
+def training_callbacks(callback_lsit, params, filepath=None):
     callbacks = []
     if 'mcp' in callback_lsit:
-        mcp = ModelCheckpoint(os.path.join(OUTPUT_PATH,"best_model.h5"), 
+        mcp = ModelCheckpoint(filepath=filepath, 
                               monitor='val_loss', verbose=1,
                               save_best_only=True, save_weights_only=False, 
                               mode='min', period=1)
@@ -89,7 +90,7 @@ def training_callbacks(callback_lsit, params, output_path=None):
                                       verbose=0, mode='auto' , 
                                       cooldown=0, min_lr=0)
         callbacks.append(reduce_lr)
-    
+
     return callbacks
 
     
@@ -146,22 +147,22 @@ class ModelPredictions:
                 start_index += x.shape[0] 
 
         else:
-            assert x.shape[0] == y.shape[0], \
+            assert X.shape[0] == y.shape[0], \
             "Input sample array (X) does not match target variable array (y)!"
             
             self.predictions = pd.Series(self._predict(self.__X, 
                                                        self.__model, 
                                                        self.__batch_size)
-                                             .reshape(-1), index = self.__datetime)
-            self.true = pd.Series(self.__y.reshape(-1), index = self.__datetime)
+                                             .reshape(-1))
+            self.true = pd.Series(self.__y.reshape(-1))
             self.predictions_org = pd.Series(self._destnd(self.predictions.values.reshape(-1,1),
                                                           self.__raw_y,
                                                           self.__stnd_method)
-                                                 .reshape(-1), index = self.__datetime)
+                                                 .reshape(-1))
             self.true_org = pd.Series(self._destnd(self.__y,
-                                                         self.__raw_y,
-                                                         self.__stnd_method)
-                                          .reshape(-1), index = self.__datetime)        
+                                                   self.__raw_y,
+                                                   self.__stnd_method)
+                                          .reshape(-1))     
         
         self.loss = self.cal_mse(self.predictions_org, self.true_org)
         self.rmse = self.cal_rmse(self.predictions_org, self.true_org)
@@ -186,7 +187,7 @@ class ModelPredictions:
     def plot_predictions(self, labels=None, title=None, origin=True):
         if labels is not None:
             assert len(labels) - len(self.loss) == 1, \
-            "Some labels might be missing."
+            "The number of labels does NOT match the number of sequences to plot."
 
             for i in range(len(labels)):
                 if i == 0:
